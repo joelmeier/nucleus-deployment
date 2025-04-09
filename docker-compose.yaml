@@ -1,0 +1,43 @@
+services:
+  db:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongo
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    ports:
+      - "27017:27017"
+    volumes:
+      - .mongo-local-data:/data/db
+
+  frontend:
+    build:
+      context: ../nucleus-frontend
+    ports:
+      - "3000:80"
+    depends_on: [ backend ]
+
+  init-db:
+    build:
+      context: ../nucleus-backend
+    depends_on:
+      - db
+    volumes:
+      - /Users/joelmeier/Docs/fhnw/bachelor-thesis/nucleus-backend/single_calculation_data:/app/calculation
+    environment:
+      - MONGO_URI=mongodb://mongo:admin@db:27017
+    entrypoint: [ "sh", "-c", "sleep 5 && python comp_parser.py /app/calculation" ]
+    restart: "no"
+
+  backend:
+    build:
+      context: ../nucleus-backend
+    depends_on:
+      - db
+      - init-db
+    environment:
+      - MONGO_URI=mongodb://mongo:admin@db:27017
+    ports:
+      - "8000:80"
+
+volumes:
+  db-data:
