@@ -3,8 +3,12 @@
 Runs the entire nucleus stack (frontend, backend as well as database) in a Docker environment
 
 ## How to run
+
+## Prerequisites
+You need to have [Docker](https://docs.docker.com/get-started/get-docker/) installed.
+
 ### Persistent volume
-There should already be a directory `.mongo-local-data` that serves as the database persistency.
+There should already be a directory `.mongo-local-data` that serves as the database persistency, if not then create it.
 
 ### Frontend & Backend directories
 The frontend project as well as the backend project directories need to be at the same level as
