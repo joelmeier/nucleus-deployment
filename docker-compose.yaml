@@ -10,36 +10,19 @@ services:
       - .mongo-local-data:/data/db
 
   frontend:
-    build:
-      context: ../nucleus-frontend
-      args:
-        - NG_APP_BASEURL_PROD=http://backend:8000
+    image: ghcr.io/joelmeier/nucleus-frontend:latest
+    pull_policy: always
     ports:
       - "3000:80"
-    environment:
-      - API_URL=http://backend:80
     depends_on: [ backend ]
 
-  init-db:
-    build:
-      context: ../nucleus-backend
-    depends_on:
-      - db
-    volumes:
-      - /Users/nicoauchli/projects_fhnw/8_Semester/ip6/nucleus-backend/calculations/single_calculation_data:/app/single_calculation_data
-    environment:
-      - MONGO_URI=mongodb://mongo:admin@db:27017
-    entrypoint: [ "sh", "-c", "sleep 5 && python app/parser/comp_parser.py /app/single_calculation_data" ]
-    restart: "no"
-
   backend:
-    build:
-      context: ../nucleus-backend
+    image: ghcr.io/joelmeier/nucleus-backend:latest
+    pull_policy: always
     depends_on:
       - db
-      - init-db
     volumes:
-      - /Users/nicoauchli/projects_fhnw/8_Semester/ip6/nucleus-backend/calculations:/app/calculations
+      - /nucleus-backend/calculations:/app/calculations
     environment:
       - MONGO_URI=mongodb://mongo:admin@db:27017
       - CALCULATIONS_PATH=/app/calculations
