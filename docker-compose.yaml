@@ -10,14 +10,14 @@ services:
       - .mongo-local-data:/data/db
 
   frontend:
-    image: ghcr.io/joelmeier/nucleus-frontend:latest
+    image: ghcr.io/joelmeier/nucleus-frontend:1.0.0
     pull_policy: always
     ports:
       - "3000:80"
     depends_on: [ backend ]
 
   backend:
-    image: ghcr.io/joelmeier/nucleus-backend:latest
+    image: ghcr.io/joelmeier/nucleus-backend:1.0.0
     pull_policy: always
     depends_on:
       - db
